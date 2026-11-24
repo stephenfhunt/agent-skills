@@ -9,7 +9,7 @@ same files work in Claude Code, claude.ai, Codex, Cursor and other agents.
 
 | Skill | What it does |
 | ----- | ------------ |
-| _none yet_ | |
+| [writing-for-humans](skills/writing-for-humans/SKILL.md) | Write docs, tutorials, explanations and work reports that a person can read once and understand. Includes a prose checker for the revision pass. |
 
 ## Install
 

@@ -1,0 +1,66 @@
+# Phrase patterns for prose_check.py.
+# Format: category <TAB> regex <TAB> reason
+# Regexes are Python syntax, matched case-insensitively against prose with code removed.
+# Lines starting with # are comments. Edit freely: the script reads this file at run time.
+
+context-leak	\bas (we )?(discussed|mentioned|agreed|established)( (above|below|earlier|before|previously))?\b|\bas (shown|described|explained|noted) (above|earlier|before|previously)\b	points at something the reader may not have seen; say what it is
+context-leak	\bas (we|you) (saw|know)\b	assumes shared context; say the thing itself
+context-leak	\b(the|this) (above|aforementioned) (approach|fix|issue|problem|plan|option|change|version|solution|discussion)\b|\b(the|this) (earlier|previous|original) (approach|fix|option|plan|solution|discussion|idea)\b	refers back to working context; name it concretely
+context-leak	\b(option|approach|plan|variant|alternative) [a-d1-9]\b(?!\w)	a label from the working session; describe the option instead
+context-leak	\bper (our|your|the) (discussion|conversation|request|instructions)\b	the reader may not have seen it; state what was asked
+context-leak	\b(earlier|above) in (this|the) (conversation|session|thread|chat)\b	the reader of a document has no conversation
+context-leak	\bthe user('s)? (asked|requested|wants|request)\b	writing about the reader in the third person; address them or state the requirement
+context-leak	\bthe (approach|fix|issue|problem|option|change|solution|plan|idea) (above|mentioned (above|earlier)|from (before|earlier)|we discussed|(we|you|i) (discussed|agreed on|mentioned))\b	refers back to working context; name it concretely
+narration	(^|[.!?]\s+)(first|then|next|after that|afterwards|finally|initially),? (i|we) (looked|examined|checked|investigated|explored|noticed|tried|found|ran|read|opened|reviewed|analy[sz]ed|dug|started)\b	narrating the process; report what you found and the evidence for it
+narration	\b(i|we)('ve| have) (now )?(completed|finished|conducted|done|carried out|performed) (a |an |my |our )?(thorough |comprehensive |detailed |careful |deep |full )?(investigation|analysis|review|exploration|audit|deep dive)\b	announces the work instead of giving the result; lead with what you found
+narration	\bafter (exploring|investigating|trying|examining|considering|evaluating) (several|various|multiple|a few|different|many) (approaches|options|alternatives|possibilities|solutions)\b	narrating the search; say what you chose and why
+self-reference	\bas an ai\b|\bas a (large )?language model\b|\bmy (training|knowledge) (data|cutoff)\b|\bas of my last (update|training)\b	model self-reference; state the concrete limit if it matters
+throat-clearing	\bit'?s (worth|important to|crucial to|essential to) (noting|note|mention(ing)?|remember(ing)?|emphasi[sz]e|emphasi[sz]ing|highlight(ing)?|point(ing)? out|understand(ing)?)\b	announces instead of saying; if it matters, just say it
+throat-clearing	\bit (should|must|is worth) (be )?(noted|mentioned|pointed out|emphasi[sz]ed|stressed)\b	announces instead of saying; delete and start with the point
+throat-clearing	\bplease note\b|\bneedless to say\b|\bit goes without saying\b|\bwithout further ado\b	throat-clearing; delete
+throat-clearing	(^|[.!?]\s+)(interestingly|importantly|notably|crucially|significantly),	sentence-opening flag word; let the content show it matters
+throat-clearing	\bi (might|would like to|want to) (add|mention|point out|note|emphasi[sz]e)\b	if you want to add it, add it
+throat-clearing	\bin today'?s (fast-paced|digital|modern|ever-changing|rapidly evolving)\b	stock opening; start with the subject
+signpost	\b(let'?s|let us) (dive|delve|explore|take a (closer |quick )?look|break (it|this|that) down|unpack|walk through|get started|jump in)\b	signposting; deliver the content
+signpost	\bin (this|the following|the next) (section|guide|article|document|post|tutorial|chapter),? (we|you|i)('ll| will) (explore|look at|cover|discuss|learn|walk through|examine|dive)\b	pre-announces the section; headings already do this
+signpost	\bhere'?s (a|the) (quick |brief |detailed )?(breakdown|overview|summary|rundown|deep dive)\b	signposting; give the content
+recap	\b(in summary|in conclusion|to summari[sz]e|to sum up|to recap|in short|in a nutshell)\b	recap marker; does the reader need the points again?
+recap	(^|[.!?]\s+)(overall|ultimately|bottom line|key takeaways?|tl;?dr)\b[,:]?	recap marker; end when the content ends
+contrastive	\bnot (just|only|merely|simply) [^.;:]{1,60}?\bbut\b	"not just X but Y"; state the claim directly
+contrastive	\b(it'?s|this is|that'?s|they'?re) not (just |only |merely )?(about )?[^.;:]{1,50}?[,;:.—–-]+\s*(it'?s|this is|that'?s|they'?re)\b	"it's not X, it's Y"; did anyone suggest X?
+contrastive	\b(isn'?t|aren'?t|wasn'?t) (just |only |merely )?(about )?[^.;:]{1,50}?[,;:.—–-]+\s*(it'?s|this is|that'?s|they'?re)\b	"isn't X, it's Y"; did anyone suggest X?
+significance	\b(play|plays|played|playing) an? (crucial|pivotal|vital|key|significant|important|critical|central|essential|instrumental) role\b	inflated significance; say what it does
+significance	\b(stands|serves|acts) as (an?|the)\b	avoids "is"; use "is" if you mean it
+significance	\btestament to\b	inflated significance; give the evidence instead
+significance	\b(underscores?|underscoring|highlights?|highlighting|emphasi[sz]es|emphasi[sz]ing|reinforces|reinforcing) (the|its|their|our|a) (importance|significance|need|value|role|commitment)\b	commentary instead of content; cut or support it
+significance	\b(evolving|ever-evolving|ever-changing|dynamic|rapidly changing) landscape\b	stock phrase; name the actual situation
+significance	\bin the (realm|world|landscape|space) of\b	filler frame; usually deletable
+significance	\bpaves? the way\b|\blay(s|ing)? the (groundwork|foundation)\b|\bset(s|ting)? the stage\b|\bgame[- ]changer\b|\bindelible mark\b|\bdeeply rooted\b|\b(rich|vibrant|intricate) tapestry\b	stock significance phrase; say something specific
+significance	\bnavigat(e|es|ing) the (complexities|challenges|intricacies|nuances)\b	stock phrase; name the actual problem
+significance	\bdespite (these|its|the) challenges\b	formulaic challenges paragraph; state the specific problem and its effect
+significance	,\s+(ensuring|highlighting|underscoring|emphasi[sz]ing|reflecting|showcasing|fostering|enabling|paving)\b	participle tail adding commentary; cut it or make it a supported claim
+vague-link	\b(closely |deeply |intimately )?(connected|linked|tied) (to|with)\b|\bin connection with\b	vague relationship; name it (calls, replaces, depends on)
+ai-vocabulary	\bdelv(e|es|ed|ing)\b|\btapestr(y|ies)\b|\bmultifaceted\b|\bintricac(y|ies)\b|\bmeticulous(ly)?\b|\bpivotal\b|\bshowcas(e|es|ed|ing)\b|\bunderscor(e|es|ed|ing)\b|\bbolster(s|ed|ing)?\b|\bgarner(s|ed|ing)?\b|\bfoster(s|ed|ing)?\b|\bvibrant\b|\bholistic\b|\bsynerg(y|ies)\b|\bparadigm\b|\brealm\b|\bempower(s|ed|ing|ment)?\b|\belevat(e|es|ed|ing)\b|\bembark(s|ed|ing)?\b|\bunlock(s|ed|ing)? (the |your |its )?(full )?potential\b|\bboasts?\b	vocabulary that has drifted to generic in model prose; clusters are the signal, so ask whether a plainer or more specific word fits
+inflated	\butili[sz](e|es|ed|ing|ation)\b	long word; try "use"
+inflated	\bleverag(e|es|ed|ing)\b	try "use", or name what is being used and how
+inflated	\bfacilitat(e|es|ed|ing)\b	try "help", "let", or the specific action
+inflated	\bseamless(ly)?\b|\brobust(ly|ness)?\b|\bcomprehensive\b|\bcrucial\b|\bcutting[- ]edge\b|\bstate[- ]of[- ]the[- ]art\b	generic praise word; say what specifically is true
+inflated	\bcommence(s|d)?\b|\bendeavou?r(s|ed|ing)?\b|\bameliorat(e|es|ed|ing)\b	long word; try "start", "try", "improve"
+inflated	\bnumerous\b|\bsufficient(ly)?\b|\bapproximately\b	long word; try "many", "enough", "about"
+inflated	\bin order to\b	usually just "to"
+inflated	\bdue to the fact that\b|\bin spite of the fact that\b|\bdespite the fact that\b	wordy; try "because" or "although"
+inflated	\bat (this|the present) (point in )?time\b	wordy; try "now", or nothing
+inflated	\bin the event that\b|\bfor the purpose of\b|\bwith (regard|respect) to\b|\bin regard to\b	wordy; try "if", "to", "about"
+inflated	\bprior to\b|\bsubsequent to\b	try "before", "after"
+inflated	\b(is|are|was|were) able to\b|\bha(s|ve) the ability to\b	try "can" or "could"
+inflated	\bmake use of\b|\btake into consideration\b|\bgive consideration to\b|\bthe vast majority of\b|\ba (large|significant|substantial) number of\b	wordy; try "use", "consider", "most", "many"
+inflated	\bmethodology\b|\bindividuals\b	try "method", "people"
+transition	(^|[.!?]\s+)(additionally|furthermore|moreover|that said|at the end of the day)\b	filler transition; the sentence usually connects without it
+intensifier	\b(very|really|truly|incredibly|extremely|literally|basically|essentially|definitely|actually|surely)\b	empty intensifier; cut it, or use a stronger word or a fact
+intensifier	\bquite\b(?! a few)|\brather\b(?! than)|\bpretty (much|well|good|bad|easy|hard|simple|straightforward|clear|sure)\b	empty intensifier; cut it, or use a stronger word or a fact
+redundancy	\b(end result|final outcome|future plans|past history|advance planning|added bonus|free gift|close proximity|each and every|first and foremost|basic fundamentals|(combine|join|merge|fuse|blend|gather) together|repeat again|revert back|return back|continue on|still remains|exact same|general consensus|consensus of opinion|new innovation|unexpected surprise|true fact|pin number|atm machine|(may|might) possibly|absolutely (essential|certain|necessary)|completely (eliminate|finish|destroy)|brief summary|plan ahead|share in common|over-exaggerate)\b	redundant pair; one word does the job
+salesmanship	\bblazing(ly)?[- ]fast\b|\blightning[- ]fast\b|\bsuper[- ]fast\b|\beffortless(ly)?\b|\bworld[- ]class\b|\bbest[- ]in[- ]class\b|\bnext[- ]gen(eration)?\b|\brevolutionary\b|\bsupercharg(e|es|ed|ing)\b|\bunparalleled\b|\bunmatched\b|\bpowerful\b	promotional; describe what it does, with numbers if speed matters
+salesmanship	\b(has|have|got) you covered\b|\blook no further\b|\bto the next level\b|\bwhether you'?re an? [^.]{1,60}? or an?\b	promotional stock phrase; say who it's for and what it does
+chat-residue	\b(i )?hope (this|that|it) helps\b|\blet me know if\b|\bfeel free to\b|\bdon'?t hesitate to\b|\bhappy (coding|hacking|building|learning)\b|\bis there anything else\b|\bwould you like me to\b|\bi'?d be (happy|glad) to\b	chat residue; documents end when the content ends
+chat-residue	\b(great|excellent|good) (question|point|catch)\b|\byou'?re (absolutely|completely) right\b|(^|[.!?]\s+)(certainly|absolutely|of course|sure)[!,]	conversational filler; start with the content
+politeness	\bplease (click|run|select|enter|type|open|use|follow|ensure|make sure|be sure|refer|see|check|install|note)\b	over-polite instruction; drop "please"
